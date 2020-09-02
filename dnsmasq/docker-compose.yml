@@ -3,19 +3,19 @@ networks:
   traefik:
 #
 services:
- dnsmasq:
+  dnsmasq:
     container_name: dnsmasq
-    image: jpillora/dnsmasq
+    image: micedwards/dnsmasq-gui:arm7 
     ports:
       - 53:53/udp
-	  - 5380:8080
+      - 5380:8080
     volumes:
       - $PWD/dnsmasq.conf:/etc/dnsmasq.conf
     networks:
-      - traefik	
+      - traefik
     environment:
-      HTTP_USER=foo
-      HTTP_PASS=bar
-    logging:
-      options:
-        max-size:100m
+      - HTTP_USER:"admin"
+      - HTTP_PASS:"12qwaszx@@"
+    labels:
+      - "traefik.http.routers.dnsmasq.rule=Host(`dnsmasq.nerdseverino.local`)"
+#
