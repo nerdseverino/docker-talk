@@ -1,0 +1,21 @@
+version: '3'
+networks:
+  traefik:
+volumes:
+  portainer_data:
+  nextcloud_data:
+#
+services:
+  nextcloud:
+    container_name: nextcloud
+    image: armhero/nextcloud
+    volumes:
+      #- $PWD/nextcloud:/var/www/html  
+      - nextcloud_data:/data
+    labels:
+      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.nerdseverino.local`)"
+#    ports:
+#      - 80:80
+    networks:
+      - traefik
+#

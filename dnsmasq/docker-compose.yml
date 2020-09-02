@@ -1,0 +1,21 @@
+version: '3'
+networks:
+  traefik:
+#
+services:
+ dnsmasq:
+    container_name: dnsmasq
+    image: jpillora/dnsmasq
+    ports:
+      - 53:53/udp
+	  - 5380:8080
+    volumes:
+      - $PWD/dnsmasq.conf:/etc/dnsmasq.conf
+    networks:
+      - traefik	
+    environment:
+      HTTP_USER=foo
+      HTTP_PASS=bar
+    logging:
+      options:
+        max-size:100m

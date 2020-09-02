@@ -1,0 +1,26 @@
+version: '3'
+networks:
+  traefik:
+#
+services:
+ traefik:
+    container_name: traefik
+    image: traefik:latest
+    command: --api.insecure=true --providers.docker
+    ports:
+      - 8081:80
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - traefik
+#
+  whoami:
+    image: ctmagazin/whoami 
+    labels:
+      - "traefik.http.routers.whoami.rule=Host(`teste.nerdseverino.local`)"
+    ports:
+     - 80:80
+    networks:
+      - traefik
+# 
