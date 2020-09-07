@@ -1,6 +1,8 @@
 version: '3'
 networks:
   traefik:
+volumes:
+  portainer_data:
 #
 services:
  portainer:
@@ -8,14 +10,13 @@ services:
     image: portainer/portainer:latest
     command: -H unix:///var/run/docker.sock
     restart: always
-#    ports:
-#      - 9000:9000
-#      - 8000:8000
-    labels:
-      - traefik.backend=portainer
-      - traefik.frontend.rule=Host:portainer.nerdseverino.local
-      - traefik.port=9000
-      - traefik.port=8000
+    ports:
+      - 9000:9000
+      - 8000:8000
+#    labels:
+#      - traefik.backend=portainer
+#      - traefik.frontend.rule=Host:portainer.nerdseverino.local
+#      - traefik.port=9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
