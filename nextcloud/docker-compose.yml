@@ -1,8 +1,9 @@
 version: '3'
 networks:
-  traefik:
+  default:
+    external:
+      name: traefik
 volumes:
-  portainer_data:
   nextcloud_data:
 #
 services:
@@ -13,9 +14,12 @@ services:
       #- $PWD/nextcloud:/var/www/html  
       - nextcloud_data:/data
     labels:
+      - traefik.backend=nextcloud
+      - traefik.frontend.rule=Host:nextcloud.nerdseverino.local
+      - traefik.port=80      
       - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.nerdseverino.local`)"
-#    ports:
-#      - 80:80
-    networks:
-      - traefik
+        #    ports:
+        #      - 8083:80
+        #    networks:
+        #      - traefik
 #

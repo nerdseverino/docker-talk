@@ -1,12 +1,15 @@
 version: '3'
 networks:
-  traefik:
+  default:
+    external:
+      name: traefik
 #
+services:
   rpi-monitor:
     container_name: rpi-monitor
     image: michaelmiklis/rpi-monitor:latest
     volumes:
-      - /opt/vc:/opt/vc
+      - $PWD/vc:/opt/vc
       - /boot:/boot
       - /sys:/dockerhost/sys:ro
       - /etc:/dockerhost/etc:ro
@@ -15,13 +18,12 @@ networks:
     devices:
       - "/dev/vchiq:/dev/vchiq" 
       - "/dev/vcsm:/dev/vcsm"  
-    restart: unless-stopped
+#    restart: unless-stopped
 #    ports:
 #      - 8888:8888
     labels:
-      - traefik.backend=rpi-monitor
+      - traefik.backend=rpimonitor
       - traefik.frontend.rule=Host:rpimonitor.nerdseverino.local
       - traefik.port=8888
-    networks:
-      - traefik
+      - "traefik.http.routers.rpimonitor.rule=Host(`rpimonitor.nerdseverino.local`)"
 #
