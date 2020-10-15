@@ -1,0 +1,68 @@
+version: '3'
+services:
+
+  app:
+    image: 'jc21/nginx-proxy-manager'
+    container_name: proxy
+    links:
+      - db:db
+    ports:
+      - '85:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - $PWD/config.json:/app/config/production.json
+      - $PWD/npm/data:/data
+      - $PWD/npm/letsencrypt:/etc/letsencrypt
+#
+  db:
+    image: 'hypriot/rpi-mysql'
+    container_name: proxy_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 'npm'
+      MYSQL_DATABASE: 'npm'
+      MYSQL_USER: 'npm'
+      MYSQL_PASSWORD: 'npm'
+    volumes:
+      - $PWD/npm/data/mysql:/var/lib/mysql
+#
+  portainer:
+    container_name: portainer 
+    image: portainer/portainer:latest
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - 9000:9000
+      - 8000:8000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $pwd/portainer_data:/data
+#
+  nextcloud_db:
+    image: 'hypriot/rpi-mysql'
+    container_name: nextcloud_db
+    environment:
+      MYSQL_ROOT_PASSWORD: supersecretpassword
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: supersecretpassword
+    volumes:
+      - $PWD/nextcloud/db:/var/lib/mysql
+#
+  nextcloud:
+          #    image: 'linuxserver/nextcloud'
+    image: 'nextcloud'
+    container_name: nextcloud
+    environment:
+      MYSQL_DATABASE: "nextcloud"
+      MYSQL_USER: "nextcloud"
+      MYSQL_PASSWORD: "supersecretpassword"
+      MYSQL_HOST: "nextcloud_db"
+      NEXTCLOUD_ADMIN_USER: "systemcrash"
+      NEXTCLOUD_ADMIN_PASSWORD: "*suporte10"
+    ports:
+      - '80:80'
+    links:
+      - nextcloud_db:nextcloud_db
+    volumes:
+      - $PWD/nextcloud/data:/var/www/html

@@ -3,23 +3,33 @@ networks:
   default:
     external:
       name: traefik
-volumes:
-  nextcloud_data:
-#
 services:
-  nextcloud:
-    container_name: nextcloud
-    image: armhero/nextcloud
-    volumes:
-      #- $PWD/nextcloud:/var/www/html  
-      - nextcloud_data:/data
-    labels:
-      - traefik.backend=nextcloud
-      - traefik.frontend.rule=Host:nextcloud.nerdseverino.local
-      - traefik.port=80      
-      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.nerdseverino.local`)"
-        #    ports:
-        #      - 8083:80
-        #    networks:
-        #      - traefik
 #
+  nextcloud_db:
+    image: 'hypriot/rpi-mysql'
+    container_name: nextcloud_db
+    environment:
+      MYSQL_ROOT_PASSWORD: supersecretpassword
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: supersecretpassword
+    volumes:
+      - $PWD/nextcloud/db:/var/lib/mysql
+#
+  nextcloud:
+    image: 'linuxserver/nextcloud'
+#    image: 'nextcloud'
+    container_name: nextcloud
+    environment:
+      MYSQL_DATABASE: "nextcloud"
+      MYSQL_USER: "nextcloud"
+      MYSQL_PASSWORD: "supersecretpassword"
+      MYSQL_HOST: "nextcloud_db"
+      NEXTCLOUD_ADMIN_USER: "systemcrash"
+      NEXTCLOUD_ADMIN_PASSWORD: "*suporte10"
+    ports:
+      - '80:80'
+    links:
+      - nextcloud_db:nextcloud_db
+    volumes:
+      - $PWD/nextcloud/data:/var/www/html
