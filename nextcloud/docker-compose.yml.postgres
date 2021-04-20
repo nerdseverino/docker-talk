@@ -17,11 +17,6 @@ services:
       - $PWD/npm/config.json:/app/config/production.json
       - $PWD/npm/data:/data
       - $PWD/npm/letsencrypt:/etc/letsencrypt
-#    logging:
-#      driver: gelf
-#      options:
-#        gelf-address: "tcp://192.168.2.250:12201"
-#        tag: proxy
 #----------------------------------------------------------------
   db:
     image: 'ugeek/mariadb:arm'
@@ -33,71 +28,56 @@ services:
       MYSQL_PASSWORD: 'npm'
     volumes:
       - $PWD/npm/data/mysql:/var/lib/mysql
-#    logging:
-#      driver: gelf
-#      options:
-#        gelf-address: "tcp://192.168.2.250:12201"
-#        tag: proxy
+#----------------------------------------------------------------
+  portainer:
+    container_name: portainer 
+    image: portainer/portainer:latest
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - 9000:9000
+      - 8000:8000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $PWD/portainer_data:/data
 #----------------------------------------------------------------
   nextcloud_db:
-    image: 'ugeek/mariadb:arm'
+    image: 'postgres'
     container_name: nextcloud_db
     environment:
-      MYSQL_ROOT_PASSWORD: '@superpassword'
-      MYSQL_DATABASE: 'nextcloud'
-      MYSQL_USER: 'nextcloud'
-      MYSQL_PASSWORD: '@superpassword'
+      POSTGRES_DB: "nextcloud"
+      POSTGRES_USER: "nextcloud"
+      POSTGRES_PASSWORD: "@suporte10"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
-      - $PWD/nextcloud/db:/var/lib/mysql
-#    logging:
-#      driver: gelf
-#      options:
-#        gelf-address: "tcp://192.168.2.250:12201"
-#        tag: nextcloud
+      - $PWD/nextcloud2/db_pg:/var/lib/postgresql/data/pgdata
 #----------------------------------------------------------------
   nextcloud:
     image: 'nextcloud:latest'
     container_name: nextcloud
     depends_on:
       - nextcloud_db           
-      - redis
+      - redis                     
     environment:
-      MYSQL_DATABASE: "nextcloud"
-      MYSQL_USER: "nextcloud"
-      MYSQL_PASSWORD: "@superpassword"
-      MYSQL_HOST: "nextcloud_db"
+      POSTGRES_DB: "nextcloud"
+      POSTGRES_USER: "nextcloud"
+      POSTGRES_PASSWORD: "@suporte10"
+      POSTGRES_HOST: "nextcloud_db"
       NEXTCLOUD_ADMIN_USER: "systemcrash"
       NEXTCLOUD_ADMIN_PASSWORD: "*suporte10"
       REDIS_HOST: "redis"
-      NEXTCLOUD_TRUSTED_DOMAINS: 'teste.nerdseverino.local'
-
+      NEXTCLOUD_TRUSTED_DOMAINS: "cloud.nerdseverino.com.br"
     links:
       - nextcloud_db:nextcloud_db
       - redis:redis
     volumes:
-      - $PWD/nextcloud/container:/var/www/html
-      - $PWD/nextcloud/data:/var/www/html/data
-#      - $PWD/nextcloud/config.php:/var/www/html/config/config.php
+      - $PWD/nextcloud2/container_pg:/var/www/html
+      - $PWD/nextcloud2/data_pg:/var/www/html/data
 #    ports:
 #      - 80:80
-#    logging:
-#      driver: gelf
-#      options:
-#        gelf-address: "tcp://192.168.2.250:12201"
-#        tag: nextcloud
 #----------------------------------------------------------------
   redis:
     image: redis:alpine
     container_name: redis
-    depends_on:
-      - db
     volumes:
-      - $PWD/nextcloud/data/redis:/data
-#    logging:
-#      driver: gelf
-#      options:
-#        gelf-address: "tcp://192.168.2.250:12201"
-#        tag: nextcloud
-#
-#----------------------------------------------------------------
-
+       - $PWD/nextcloud2/data_pg/redis:/data    
