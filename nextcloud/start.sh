@@ -25,6 +25,3 @@ docker exec --user www-data nextcloud php occ files:scan --all
 #Nextcloud
 #docker run -d --name nextcloud --link nextcloud_db:nextcloud_db -v $PWD/nextcloud/dados:/var/www/html nextcloud
 
-#LEGO
-#docker run --name lego -v "$PWD/lego/cert:/.lego" -e "CLOUDFLARE_DNS_API_TOKEN=g54W4ODcOOpYDZihpN1auhguX19InXWQWqDlQPxD" goacme/lego --dns cloudflare -a --domains cloud.nerdseverino.com.br --email machado.computer@gmail.com run
-
