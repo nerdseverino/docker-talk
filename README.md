@@ -14,5 +14,4 @@ mediawiki	      OK	    OK - sqlite\
 SAMBA		        OK	    Working\
 lazydocker	    OK	    OK\
 portainer	      OK	    OK\
-npm             OK      -\
-
+npm             OK      -
