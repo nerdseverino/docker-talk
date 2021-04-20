@@ -3,7 +3,7 @@
 Containers rodando no Raspberry 
 
 ***Container	|  PI 3	| Zero W***
-
+------------- | ----- | ---------
 dnsmasq 	    |  OK	  |  OK\
 fail2ban	    |  OK	  |  OK\
 nextcloud	    |  OK	  |  OK\
