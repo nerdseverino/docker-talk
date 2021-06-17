@@ -8,15 +8,15 @@ services:
   mediawiki:
     container_name: mediawiki 
     image: arm32v5/mediawiki 
-    #    restart: always
-    #    ports:
-    #      - 8080:80
+#    restart: always
+    ports:
+      - 8080:80
     volumes:
       - $pwd/html/images:/var/www/html/images
       # After initial setup, download LocalSettings.php to the same directory as
       # this yaml and uncomment the following line and use compose to restart
       # the mediawiki service
-      # - $PWD/LocalSettings.php:/var/www/html/LocalSettings.php
+      #      - $PWD/LocalSettings.php:/var/www/html/LocalSettings.php
     labels:
       - traefik.backend=mediawiki
       - traefik.frontend.rule=Host:mediawiki.nerdseverino.local

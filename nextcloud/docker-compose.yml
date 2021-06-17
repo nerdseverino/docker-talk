@@ -1,35 +1,26 @@
 version: '3'
+
 networks:
-  default:
-    external:
-      name: traefik
+  reverse-proxy:
+    external: true
+    name: reverse-proxy
+
 services:
 #
-  nextcloud_db:
-    image: 'hypriot/rpi-mysql'
-    container_name: nextcloud_db
-    environment:
-      MYSQL_ROOT_PASSWORD: supersecretpassword
-      MYSQL_DATABASE: nextcloud
-      MYSQL_USER: nextcloud
-      MYSQL_PASSWORD: supersecretpassword
-    volumes:
-      - $PWD/nextcloud/db:/var/lib/mysql
-#
   nextcloud:
-    image: 'linuxserver/nextcloud'
-#    image: 'nextcloud'
+    image: 'nextcloud'
     container_name: nextcloud
     environment:
-      MYSQL_DATABASE: "nextcloud"
-      MYSQL_USER: "nextcloud"
-      MYSQL_PASSWORD: "supersecretpassword"
-      MYSQL_HOST: "nextcloud_db"
+      VIRTUAL_HOST: nextcloudteste.nerdseverino.com.br
+      LETSENCRYPT_HOST: nextcloudteste.nerdseverino.com.br
+      LETSENCRYPT_EMAIL: machado.computer@gmail.com
       NEXTCLOUD_ADMIN_USER: "administrador"
       NEXTCLOUD_ADMIN_PASSWORD: "@supersenha"
-    ports:
-      - '80:80'
-    links:
-      - nextcloud_db:nextcloud_db
+      SQLITE_DATABASE: banco_sqlite
+      NEXTCLOUD_TRUSTED_DOMAINS: "192.168.2.27"
+   #ports:
+     #- '80:80'
     volumes:
       - $PWD/nextcloud/data:/var/www/html
+    networks:
+      - reverse-proxy
