@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  wordpressdb:
+    image: mariadb:latest
+    container_name: wordpressdb
+    volumes:
+      - $PWD/database:/var/lib/mysql
+#      - $PWD/database/wordpress-nerdseverino.sql:/docker-entrypoint-initdb.d/backup.sql.gz
+#      - $PWD/database/migrate.sql:/docker-entrypoint-initdb.d/migrate.sql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "strongpass"
+      MYSQL_DATABASE: wordpress
+    labels:
+      - traefik.enable=false
+  
+  wordpress:
+    depends_on:
+      - wordpressdb
+    image: wordpress:latest
+    container_name: wordpress
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    environment:
+      WORDPRESS_DB_PASSWORD: "strongpass"
+    links:
+      - wordpressdb:mysql
+    volumes:
+      - $PWD/html:/var/www/html
+    labels:
+      - traefik.backend=blog
+      - traefik.frontend.rule=Host:blog.nerdseverino.local
+      - traefik.port=80      

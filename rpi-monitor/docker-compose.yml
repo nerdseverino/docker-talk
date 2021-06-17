@@ -1,8 +1,4 @@
 version: '3'
-networks:
-  default:
-    external:
-      name: traefik
 #
 services:
   rpi-monitor:
@@ -15,9 +11,12 @@ services:
       - /etc:/dockerhost/etc:ro
       - /proc:/dockerhost/proc:ro
       - /usr/lib:/dockerhost/usr/lib:ro
+<<<<<<< HEAD
     devices:
       - "/dev/vchiq:/dev/vchiq" 
 #      - "/dev/vcsm:/dev/vcsm"  
+=======
+>>>>>>> d0c6c1e6e6dce73bbdcc8661a7bbc619ec9458eb
 #    restart: unless-stopped
     ports:
       - 8888:8888

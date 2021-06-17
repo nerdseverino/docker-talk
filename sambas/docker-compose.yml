@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+  samba:
+    container_name: samba1
+    hostname: samba1
+    image: sixeyed/samba
+    volumes:
+      - $PWD/data/samba1:/mnt/samba
+    ports:
+      - 139:139
+      - 445:445
+      - 137:137/udp
+      - 138:138/udp
+    command: samba.sh -s "samba1;/mnt/samba;yes;no;yes;all" 
+    mem_limit: 1g
+    restart: always
+    networks:
+      - samba1
+#
+  samba2:
+    container_name: samba2
+    hostname: samba2
+    image: sixeyed/samba
+    volumes:
+      - $PWD/data/samba2:/mnt/samba
+    ports:
+      - 3139:139
+      - 3445:445
+      - 3137:137/udp
+      - 3138:138/udp
+    command: samba.sh -s "samba2;/mnt/samba;yes;no;yes;all"
+    mem_limit: 1g
+    restart: always
+    networks:
+      - samba2
+#
+networks:
+   samba1:
+   samba2:
