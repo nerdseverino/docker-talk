@@ -3,7 +3,7 @@ networks:
   default:
     external:
       name: traefik
-      name: reverse-proxy
+
 #
 volumes:
   portainer_data:
@@ -30,6 +30,6 @@ services:
       - LETSENCRYPT_HOST=portainer.nerdseverino.com.br
       - LETSENCRYPT_EMAIL=machado.computer@gail.com
       - VIRTUAL_PORT="9000"
-    networks:
-      - reverse-proxy
+        #    networks:
+        #      - reverse-proxy
 #   

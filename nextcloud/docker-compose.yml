@@ -46,7 +46,7 @@ services:
       NEXTCLOUD_ADMIN_USER: "suseradmin"
       NEXTCLOUD_ADMIN_PASSWORD: "@supersenha10"
       REDIS_HOST: "redis"
-      NEXTCLOUD_TRUSTED_DOMAINS: 'cloud.nerdseverino.com.br'
+      NEXTCLOUD_TRUSTED_DOMAINS: '192.168.2.27'
 
     links:
       - nextcloud_db:nextcloud_db
