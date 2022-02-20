@@ -40,4 +40,4 @@ SAMBA		      |  OK	  |  Working
 lazydocker	  |  OK	  |  OK
 portainer	    |  OK	  |  OK
 npm           |  OK   |   -
->>>>>>> d0c6c1e6e6dce73bbdcc8661a7bbc619ec9458eb
+>>>>>>> 
