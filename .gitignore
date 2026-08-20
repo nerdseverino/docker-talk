@@ -1,0 +1,23 @@
+# Secrets e credenciais
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*
+*secret*
+
+# Docker volumes e dados persistentes
+data/
+database/
+uploads/
+backup/
+
+# Kiro CLI
+.kiro/
+
+# OS
+.DS_Store
+Thumbs.db
